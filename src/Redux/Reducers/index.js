@@ -5,7 +5,7 @@ import productsReducer from './productsReducer';
 
 const rootReducer = combineReducers({
     products: productsReducer,
-    product: productReducer
+    product: productReducer,
 })
 
 export default rootReducer;
