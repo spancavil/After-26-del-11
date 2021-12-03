@@ -1,6 +1,12 @@
+import { useContext } from "react";
 import { NavLink} from "react-router-dom";
+import { Cart } from "../../Context/CartProvider";
+import CartWidget from "./CartWidget";
+import './styles.scss'
 
 const NavBar = () => {
+
+  const {cart} = useContext(Cart);
 
   return (
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,6 +27,12 @@ const NavBar = () => {
                 <NavLink to="/category/women's clothing" className="nav-link" >Women</NavLink>
             </li>
           </ul>
+          <CartWidget/>
+          {cart.length > 0 &&
+          <div className="quantity">
+            <span>{cart.length}</span>
+          </div>
+          }
         </div>
       </nav>
   )

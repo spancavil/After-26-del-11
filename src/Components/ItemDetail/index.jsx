@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Cart } from '../../Context/CartProvider';
 import ItemCount from '../ItemCount';
 import './styles.scss';
 
 const ItemDetail = ({product}) => {
+
+    const {addItem} = useContext(Cart);
 
     const [buy, setBuy] = useState(false);
     const [cantidad, setCantidad] = useState(0);
@@ -13,7 +16,7 @@ const ItemDetail = ({product}) => {
     }
 
     const handlePurchase = () => {
-        
+        addItem(product);
     }
 
     console.log(cantidad);
