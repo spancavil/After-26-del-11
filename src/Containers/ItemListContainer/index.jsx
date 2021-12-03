@@ -1,49 +1,53 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getProducts, getProductsByCategory } from '../../Services/getItems';
+// import { getProducts, getProductsByCategory } from '../../Services/getItems';
 import ItemList from '../../Components/ItemList';
 import './styles.scss'
 import Loader from '../../Components/Loader';
+import { connect } from 'react-redux';
+import { getItemsCategoryRedux, getItemsRedux } from '../../Redux/Actions/productActions';
 
-const ItemListContainer = () => {
+const ItemListContainer = ({dispatch, items, loading, hasErrors}) => {
     
     const {categoryId} = useParams();
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
+    console.log(items, loading, hasErrors);
 
     useEffect( ()=> {
         
         console.log("Entro al use effect");
-        
-        (async () => {
+
+        //Despachamos uno u otro dependiendo si ingresa o no el categoryId
+        if (categoryId !== undefined){
             
-            if (categoryId !== undefined){
-                
-                const productos = await getProductsByCategory(categoryId);
-                // console.log(personajes);
-                setProducts(productos)
+            dispatch(getItemsCategoryRedux(categoryId))
 
-            } else {
-                
-                const productos = await getProducts()
-                // console.log(personajes)
-                setProducts(productos)
+        } else {
+            
+            dispatch(getItemsRedux())
 
-            }
-        })()
+        }
 
-    }, [categoryId])
-
-    console.log(categoryId);
+    }, [dispatch, categoryId])
 
     return (
         <>
-        {products.length !== 0 ?
-        <ItemList products={products}/>
-        :
+        {loading ?
         <Loader/>
+        :
+        <ItemList items={items}/>
         }
         </>
     )
 }
 
-export default ItemListContainer;
+// Map Redux state to React component props
+const mapStateToProps = (state) => ({
+    loading: state.products.loading,
+    items: state.products.items,
+    hasErrors: state.products.hasErrors,
+})
+
+// Connect Redux to React
+export default connect(mapStateToProps)(ItemListContainer)
+

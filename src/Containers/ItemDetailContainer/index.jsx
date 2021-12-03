@@ -1,38 +1,37 @@
 import React from 'react'
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom'
-import { getProduct } from '../../Services/getItems';
+// import { getProduct } from '../../Services/getItems';
 import ItemDetail from '../../Components/ItemDetail';
 import Loader from '../../Components/Loader';
+import { getItemRedux } from '../../Redux/Actions/productActions';
+import { connect } from 'react-redux';
 
-const ItemDetailContainer = () => {
+const ItemDetailContainer = ({dispatch, items, loading, hasErrors}) => {
 
     const {id} = useParams();
-    const [product, setProduct] = useState({})
+    // const [product, setProduct] = useState({})
 
     useEffect( ()=> {
         
-        ( async () => {
-            const product = await getProduct (id);
-            setProduct(product);
-        })()
+        dispatch( getItemRedux(id) )
 
-    }, [id])
+    }, [dispatch, id])
     
-    console.log(product);
+    console.log(items);
 
     return (
         <>
         {
-            product.title !== undefined ?
+            !loading ?
             <div style={{
                 display: 'flex',
                 justifyContent: "center",
                 alignItems: "center",
                 paddingTop: 30,
             }}>
-                <ItemDetail product={product}/>
+                <ItemDetail product={items}/>
             </div>
             :
             <Loader/>
@@ -41,4 +40,12 @@ const ItemDetailContainer = () => {
     )
 }
 
-export default ItemDetailContainer
+// Map Redux state to React component props
+const mapStateToProps = (state) => ({
+    loading: state.product.loading,
+    items: state.product.items,
+    hasErrors: state.product.hasErrors,
+})
+
+// Connect Redux to React
+export default connect(mapStateToProps)(ItemDetailContainer)
