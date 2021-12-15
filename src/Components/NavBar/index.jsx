@@ -1,13 +1,16 @@
 import { useContext } from "react";
 import { NavLink} from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
+import ModalLogin from "../ModalLogin";
+import ModalSignup from "../ModalSIgnup";
 import CartWidget from "./CartWidget";
 
 const NavBar = () => {
 
-  const {cart} = useContext(CartContext);
+  const {cart, } = useContext(CartContext);
 
   return (
+    <>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,14 +30,30 @@ const NavBar = () => {
             </li>
           </ul>
           <div> 
-          <CartWidget/>
-          <span style={{
-            color: 'yellow'
-          }}>{cart.length}</span>
-          </div>
+        <CartWidget/>
+        <div style={{
+          position: "absolute",
+          right: "10px",
+          top: "7px",
+        }}
+        >
+          <button type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalSignup">
+            Signup
+          </button>
+          <button type="button" className="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            Login
+          </button>
+        </div>
+        <span style={{
+          color: 'yellow'
+        }}>{cart.length}</span>
+        </div>
 
         </div>
       </nav>
+      <ModalSignup/>
+      <ModalLogin/>
+    </>
   )
 }
 
