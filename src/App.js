@@ -4,6 +4,8 @@ import NavBar from './Components/NavBar';
 import ItemDetailContainer from './Containers/ItemDetailContainer';
 import CartContextProvider from './Context/CartContext';
 import { UserContextProvider } from './Context/UserContext';
+import RestrictedRoute from './Components/RestrictedRoute';
+import Secreto from './Components/Secreto';
 
 function App() {
   return (
@@ -12,10 +14,13 @@ function App() {
         <Router>
           <NavBar/>
           <Routes>
-            <Route exact path = "/" element={<ItemListContainer/>}/>
-            <Route exact path = "/category/:categoryId" element={<ItemListContainer/>}/>
-            <Route exact path = "/item/:id" element={<ItemDetailContainer/>} />
-            <Route element={<h2>Not found</h2>}/>
+            <Route path = "/" element={<ItemListContainer/>}/>
+            <Route path = "/category/:categoryId" element={<ItemListContainer/>}/>
+            <Route path = "/item/:id" element={<ItemDetailContainer/>} />
+            <Route path = "/rutaSecreta" element ={<RestrictedRoute>
+                                                <Secreto/>
+                                              </RestrictedRoute>}/>
+            <Route path = "*" element={<h2>Not found</h2>}/>
           </Routes>
         </Router>
       </CartContextProvider>

@@ -11,9 +11,7 @@ const ItemListContainer = () => {
     const [products, setProducts] = useState([]);
 
     useEffect( ()=> {
-        
-        console.log("Entro al use effect");
-        
+                
         (async () => {
             
             if (categoryId !== undefined){
@@ -32,8 +30,6 @@ const ItemListContainer = () => {
         })()
 
     }, [categoryId])
-
-    console.log(categoryId);
 
     return (
         <>

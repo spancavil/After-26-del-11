@@ -1,10 +1,17 @@
 import React, { useEffect, useState} from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup} from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../Firebase/config';
+
+
 export const UserContext = React.createContext()
 
 export const UserContextProvider = ({children}) => {
+
     const [user, setUser] = useState();
+    const [logged, setLogged] = useState(false);
+
+    const provider = new GoogleAuthProvider();
 
     const signup = (email, password) => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -21,28 +28,66 @@ export const UserContextProvider = ({children}) => {
           // ..
         });    }
 
-    const login = () => {
-        console.log("login!");
+    const login = (email, password) => {
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        setUser(user);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+      });
     }
 
     const logout = () => {
-        
+
+        signOut(auth).then(()=> {
+          alert("Goodbye...");
+        }).catch ((error)=>{
+          alert(error.message);
+        })
+    }
+
+    const googleAuth = () => {
+      signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(credential, token, user)
+        setUser(user);
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        alert(errorMessage);
+        console.log(error);
+        // ...
+      });
     }
 
     useEffect (
         () => {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                  // User is signed in, see docs for a list of available properties
-                  // https://firebase.google.com/docs/reference/js/firebase.User
-                  const uid = user.uid;
                   setUser(user);
-                  alert("User logged: ", uid)
+                  setLogged(true);
                   // ...
                 } else {
                   // User is signed out
                   // ...
-                  alert("No user logged");
+                  setLogged(false);
                 }
               });
         },
@@ -51,7 +96,7 @@ export const UserContextProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{
-            user, login, logout, signup
+            user, logged, login, logout, signup, googleAuth
         }}>
             {children}
         </UserContext.Provider>
