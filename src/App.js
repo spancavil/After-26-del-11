@@ -3,6 +3,7 @@ import ItemListContainer from './Containers/ItemListContainer';
 import NavBar from './Components/NavBar';
 import ItemDetailContainer from './Containers/ItemDetailContainer';
 import CartContextProvider from './Context/CartContext';
+import Cart from './Components/Cart';
 
 function App() {
   return (
@@ -10,10 +11,11 @@ function App() {
       <Router>
         <NavBar/>
         <Routes>
-          <Route exact path = "/" element={<ItemListContainer/>}/>
-          <Route exact path = "/category/:categoryId" element={<ItemListContainer/>}/>
-          <Route exact path = "/item/:id" element={<ItemDetailContainer/>} />
-          <Route element={<h2>Not found</h2>}/>
+          <Route path = "/" element={<ItemListContainer/>}/>
+          <Route path = "/category/:categoryId" element={<ItemListContainer/>}/>
+          <Route path = "/item/:id" element={<ItemDetailContainer/>} />
+          <Route path = "/cart" element={<Cart/>} />
+          <Route path = "*" element={<h2>Not found</h2>}/>
         </Routes>
       </Router>
     </CartContextProvider>

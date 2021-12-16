@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../../Context/CartContext';
 import ItemCount from '../ItemCount';
 import './styles.scss';
@@ -8,15 +9,16 @@ const ItemDetail = ({product}) => {
     const {addItem} = useContext(CartContext)
 
     const [buy, setBuy] = useState(false);
-    //const [cantidad, setCantidad] = useState(0);
+    const [qty, setQty] = useState(0);
 
     const handleBuy = (qty) => {
         setBuy(true);
-        //setCantidad(qty);
+        setQty(qty);
     }
 
     const handlePurchase = () => {
-        addItem(product);
+        addItem(product, qty);
+
     }
 
     return (
@@ -29,7 +31,7 @@ const ItemDetail = ({product}) => {
                 {!buy ?
                 <ItemCount stock = {10} onAdd = {(qty) => handleBuy (qty)} />
                 :
-                <button onClick = {handlePurchase}>Purchase</button>
+                <button onClick = {handlePurchase}> <Link to= "/cart"> Purchase </Link></button>
                 }
             </div>
         </div>
