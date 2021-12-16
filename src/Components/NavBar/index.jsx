@@ -5,7 +5,7 @@ import CartWidget from "./CartWidget";
 
 const NavBar = () => {
 
-  const {cart, cantidadTotal} = useContext(CartContext);
+  const {getCantidad} = useContext(CartContext);
 
   return (
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -36,7 +36,7 @@ const NavBar = () => {
             }}>
               <span style={{
                 color: 'white',
-              }}>{cantidadTotal}</span>
+              }}>{getCantidad()}</span>
             </div>
           </div>
 

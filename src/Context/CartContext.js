@@ -5,7 +5,15 @@ export const CartContext = createContext();
 const CartContextProvider = ({children}) => {
 
     const [cart, setCart] = useState([]);
-    const [cantidadTotal, setCantidadTotal] = useState (0)
+
+    const getCantidad = () => {
+        let subTotal = 0;
+        cart.forEach(elemento=> {
+            console.log(elemento);
+            subTotal += elemento.cantidad
+        })
+        return subTotal;
+    }
 
     const addItem = (producto, quantity) => {
 
@@ -19,7 +27,6 @@ const CartContextProvider = ({children}) => {
         } else {
             setCart([...cart, {item: producto, cantidad: quantity}]);
         }
-        sumarCantidades();
     }
 
     const isInCart = (item) => {
@@ -35,18 +42,11 @@ const CartContextProvider = ({children}) => {
 
     }
 
-    const sumarCantidades = () => {
-        let subTotal = 0;
-        cart.forEach(elemento=> {
-            subTotal += elemento.cantidad
-        })
-        setCantidadTotal(subTotal)
-    }
 
     return(
         <CartContext.Provider value = {{
-            cart, cantidadTotal,
-            addItem, removeItem, cleanCart, 
+            cart,
+            addItem, removeItem, cleanCart, getCantidad
         }}>
             {children}
         </CartContext.Provider>
